@@ -1,0 +1,22 @@
+{
+  "name": "prosign",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@nuxtjs/firebase": "^8.0.0",
+    "core-js": "^3.15.1",
+    "easyqrcodejs": "^4.4.6",
+    "firebase": "^9.5.0",
+    "nuxt": "^2.15.7",
+    "random-avatar-generator": "^2.0.0",
+    "vue-material": "^1.0.0-beta-15",
+    "vuex-persist": "^3.1.3"
+  },
+  "devDependencies": {}
+}
