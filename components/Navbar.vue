@@ -28,7 +28,7 @@ export default {
   methods: {
     doLogout() {
       this.$store.dispatch("logout");
-      this.$router.push("/login");
+      this.$router.push("/register");
     },
     setAltImg() {
       this.userimage = this.$store.state.userimage;

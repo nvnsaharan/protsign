@@ -4,6 +4,7 @@ export const state = () => ({
   userId: "",
   userimage: "",
   amount: "",
+  nft: "",
 });
 
 export const mutations = {

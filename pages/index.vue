@@ -42,7 +42,7 @@ export default {
   },
   mounted() {
     if (!this.$store.state.loginStatus) {
-      this.$router.push("/login");
+      this.$router.push("/register");
     }
   },
   watch: {},

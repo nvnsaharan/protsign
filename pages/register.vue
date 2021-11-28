@@ -8,7 +8,7 @@
         srcset=""
       />
     </div>
-    <div class="card">
+    <div v-if="register" class="card">
       <h1 class="heading">Register</h1>
       <form class="main-form">
         <input
@@ -51,6 +51,42 @@
         </md-button>
       </p>
     </div>
+    <div v-else class="card">
+      <h1 class="heading">Sign In</h1>
+      <form class="main-form">
+        <input
+          v-model="emailLogin"
+          type="email"
+          class="form-control"
+          placeholder="Email"
+          required
+        />
+        <input
+          v-model="passwordLogin"
+          type="password"
+          class="form-control"
+          placeholder="Password"
+          required
+        />
+
+        <md-button @click="doLogin" class="md-primary md-raised sign-button">
+          Sign in
+        </md-button>
+        <md-button class="google-card" @click="signUpGoogle">
+          <img
+            class="google-button"
+            src="/btn_google_signin_light_normal_web@2x.png"
+            alt="Login with google"
+          />
+        </md-button>
+      </form>
+      <p class="lower-text">
+        Don't have an account?
+        <md-button class="md-primary" @click="loginpage">
+          Register here
+        </md-button>
+      </p>
+    </div>
   </div>
 </template>
 
@@ -64,12 +100,14 @@ export default {
       usernameLogin: "",
       passwordLogin: "",
       emailLogin: "",
+      register: false,
     };
   },
   methods: {
     loginpage() {
-      this.$router.push("/login");
+      this.register = !this.register;
     },
+
     async doRegister() {
       if (this.passwordLogin.length >= 6) {
         try {
@@ -229,5 +267,15 @@ input:focus {
   justify-content: center;
   align-items: center;
   height: 20px;
+}
+@media screen and (max-width: 700px) {
+  .main {
+    background-image: none;
+    background-color: #448aff;
+    justify-content: center;
+  }
+  .the-image {
+    display: none;
+  }
 }
 </style>
