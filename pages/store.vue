@@ -12,7 +12,11 @@
           </md-card-media>
           <md-card-actions>
             <md-button class="md-accent">Price : ${{ item.price }}</md-button>
-            <md-button v-if="item.ownedBy" class="md-raised md-accent">
+            <md-button
+              v-if="item.ownedBy"
+              @click="requestNFT"
+              class="md-raised md-accent"
+            >
               Request
             </md-button>
             <md-button v-else class="md-raised md-accent"> Buy </md-button>
@@ -27,11 +31,28 @@
 export default {
   data() {
     return {
-      array: [],
+      array: this.arrayCreate(),
     };
   },
-  methods: {},
-  mounted() {
+  computed: {},
+  methods: {
+    requestNFT() {
+      alert("The request has been sent to the owner of NFT.");
+    },
+    arrayCreate() {
+      const arr = [];
+      this.$fire.firestore
+        .collection("nfts")
+        .get()
+        .then(function (query) {
+          query.docs.forEach((doc) => {
+            arr.push(doc.data());
+          });
+        });
+      return arr;
+    },
+  },
+  async mounted() {
     if (!this.$store.state.loginStatus) {
       this.$router.push("/login");
     }
