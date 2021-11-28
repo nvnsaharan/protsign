@@ -68,7 +68,4 @@ export default {
   build: {
     vandor: ["vue-material"],
   },
-  generate: {
-    dir: "public",
-  },
 };
