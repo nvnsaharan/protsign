@@ -73,16 +73,13 @@ export default {
     async doRegister() {
       if (this.passwordLogin.length >= 6) {
         try {
-          await this.$fire.auth
-            .createUserWithEmailAndPassword(this.emailLogin, this.passwordLogin)
-            .then((res) => {
-              res.user.updateProfile({
-                displayName: this.usernameLogin,
-              });
-            });
+          await this.$fire.auth.createUserWithEmailAndPassword(
+            this.emailLogin,
+            this.passwordLogin
+          );
           this.doLogin();
         } catch (e) {
-          console.error(e);
+          console.log(e);
         }
       }
     },
@@ -91,12 +88,12 @@ export default {
         await this.$fire.auth
           .signInWithEmailAndPassword(this.emailLogin, this.passwordLogin)
           .then((res) => {
-            this.$store.dispatch("login", {
-              username: res.user.displayName,
-              uid: res.user.uid,
-              userimage: generator.generateRandomAvatar(res.user.displayName),
-            });
-            this.$router.push("/");
+            this.checkUser(
+              res.user.uid,
+              this.usernameLogin,
+              this.$store,
+              this.$router
+            );
           });
       } catch (e) {
         console.log(e);
@@ -107,22 +104,56 @@ export default {
       this.$fireModule
         .auth()
         .signInWithPopup(provider)
-        .then((result) => {
-          const user = result.user;
-          this.$store.dispatch("login", {
-            username: user.displayName,
-            uid: user.uid,
-            userimage: generator.generateRandomAvatar(user.displayName),
-          });
-          this.$router.push("/");
+        .then((res) => {
+          this.checkUser(
+            res.user.uid,
+            res.user.displayName,
+            this.$store,
+            this.$router
+          );
         })
-        .catch((error) => {
-          console.log(error);
-          alert(error);
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    async checkUser(uid, username, store, router) {
+      const ref = await this.$fire.firestore.collection("users");
+      ref
+        .where("uid", "==", uid)
+        .get()
+        .then(function (query) {
+          if (query.size > 0) {
+            const data = query.docs[0].data();
+            store.dispatch("login", {
+              username: data.username,
+              uid: data.username,
+              userimage: generator.generateRandomAvatar(data.username),
+              amount: data.amount,
+            });
+            router.push("/");
+          } else {
+            console.log("No user!", username);
+            ref.add({
+              username: username,
+              uid: uid,
+              amount: 100,
+            });
+            store.dispatch("login", {
+              username: username,
+              uid: uid,
+              userimage: generator.generateRandomAvatar(username),
+              amunt: 100,
+            });
+            router.push("/");
+          }
+        })
+        .catch(function (e) {
+          console.log(e);
         });
     },
   },
-  mounted() {
+  async mounted() {
     if (this.$store.state.loginStatus) {
       this.$router.push("/");
     }

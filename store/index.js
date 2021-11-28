@@ -3,6 +3,7 @@ export const state = () => ({
   user: "",
   userId: "",
   userimage: "",
+  amount: "",
 });
 
 export const mutations = {
@@ -11,10 +12,14 @@ export const mutations = {
     state.user = payload.username;
     state.userId = payload.uid;
     state.userimage = payload.userimage;
+    state.amount = payload.amount;
   },
   logout(state) {
     state.loginStatus = false;
-    (state.user = ""), (state.userId = ""), (state.userimage = "");
+    state.user = "";
+    state.userId = "";
+    state.userimage = "";
+    state.amount = 0;
   },
 };
 

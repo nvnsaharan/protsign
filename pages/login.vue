@@ -67,15 +67,15 @@ export default {
         await this.$fire.auth
           .signInWithEmailAndPassword(this.emailLogin, this.passwordLogin)
           .then((res) => {
-            this.$store.dispatch("login", {
-              username: res.user.displayName,
-              uid: res.user.uid,
-              userimage: generator.generateRandomAvatar(res.user.displayName),
-            });
-            this.$router.push("/");
+            this.checkUser(
+              res.user.uid,
+              this.usernameLogin,
+              this.$store,
+              this.$router
+            );
           });
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
     },
     async signUpGoogle() {
@@ -83,21 +83,51 @@ export default {
       this.$fireModule
         .auth()
         .signInWithPopup(provider)
-        .then((result) => {
-          console.log(result.user);
-          const user = result.user;
-          this.$store.dispatch("login", {
-            username: user.displayName,
-            uid: user.uid,
-            userimage: user.photoURL
-              ? user.photoURL
-              : generator.generateRandomAvatar(user.displayName),
-          });
-          this.$router.push("/");
+        .then((res) => {
+          this.checkUser(
+            res.user.uid,
+            res.user.displayName,
+            this.$store,
+            this.$router
+          );
         })
-        .catch((error) => {
-          console.log(error);
-          alert(error);
+        .catch((e) => {
+          alert(e);
+        });
+    },
+    async checkUser(uid, username, store, router) {
+      const ref = await this.$fire.firestore.collection("users");
+      ref
+        .where("uid", "==", uid)
+        .get()
+        .then(function (query) {
+          if (query.size > 0) {
+            const data = query.docs[0].data();
+            store.dispatch("login", {
+              username: data.username,
+              uid: data.id,
+              userimage: generator.generateRandomAvatar(data.username),
+              amount: data.amount,
+            });
+            router.push("/");
+          } else {
+            console.log("No user!", username);
+            ref.add({
+              username: username,
+              uid: uid,
+              amount: 100,
+            });
+            store.dispatch("login", {
+              username: username,
+              uid: uid,
+              userimage: generator.generateRandomAvatar(username),
+              amunt: 100,
+            });
+            router.push("/");
+          }
+        })
+        .catch(function (e) {
+          alert(e);
         });
     },
   },
