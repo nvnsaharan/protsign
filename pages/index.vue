@@ -32,6 +32,7 @@ export default {
           const uuid =
             this.$store.state.user.split(" ")[0] + "-" + String(Date.now());
           const SAVE = {
+            user: this.$store.state.user,
             reason: this.reason,
             timestamp: this.$fireModule.firestore.FieldValue.serverTimestamp(),
           };
