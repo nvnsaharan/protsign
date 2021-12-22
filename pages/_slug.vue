@@ -75,4 +75,9 @@ export default {
   bottom: 0;
   left: 2%;
 }
+@media screen and (max-width: 480px) {
+  .main-div{
+    height: 100vh;
+  }
+}
 </style>
