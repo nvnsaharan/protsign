@@ -68,4 +68,7 @@ export default {
   build: {
     vandor: ["vue-material"],
   },
+  generate: {
+    fallback: true
+  }
 };

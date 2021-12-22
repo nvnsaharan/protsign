@@ -38,7 +38,7 @@ export default {
           };
           await this.$fire.firestore.collection("signs").doc(uuid).set(SAVE);
           var options_object = {
-            text: this.reason,
+            text: 'https://protsign.netlify.app/' + this.$store.state.user.split(" ")[0] + "-" + String(Date.now()),
             logo: this.$store.state.userimage,
             logoWidth: 100,
             logoHeight: 100,
