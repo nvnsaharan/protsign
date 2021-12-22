@@ -1,8 +1,15 @@
 <template>
-  <div>
-    <div>{{ this.timestamp }}</div>
-    <div>{{ this.reason }}</div>
-    <div>{{ this.user }}</div>
+  <div class="full">
+    <div class="main-div">
+      <img id="logo-img" src="/logo.png" alt="" srcset="" />
+      <span class="fillers">This document was signed by </span>
+      <span class="data"> {{ this.user }} </span>
+      <span class="fillers"> for the reason </span>
+      <span class="data"> {{ this.reason }} </span>
+      <span class="fillers"> on </span>
+      <span class="data"> {{ this.timestamp }} </span>
+      <span class="note">* The data is stored on a blockchain, so it is immutable and secure.</span>
+    </div>
   </div>
 </template>
 
@@ -16,8 +23,9 @@ export default {
       .get()
       .then(function (query) {
         const DATA = query.data();
+        const thedate = new Date( DATA.timestamp.toDate())
         return {
-          timestamp : DATA.timestamp.toDate(),
+          timestamp :thedate.getDate()+ "/" + thedate.getMonth() + "/" + thedate.getFullYear(),
           reason: DATA.reason,
           user: DATA.user
         }
@@ -27,4 +35,44 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.full{
+  background-color: whitesmoke;
+  height: 100vh;
+  display: flex;
+}
+.main-div{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-color: white;
+  width: 500px;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+  margin: 0 auto;
+  border-radius: 20px;
+  margin-top: 50px;
+  max-height: 500px;
+  position: relative;
+}
+#logo-img{
+  width: 200px;
+  margin-bottom: 20px;
+}
+.fillers{
+  font-size: 20px;
+  line-height: 34px;
+  color: gray;
+}
+.data{
+  font-size: 26px;
+  line-height: 34px;
+  font-weight: 500;
+}
+.note{
+  position: absolute;
+  bottom: 0;
+  left: 2%;
+}
+</style>
