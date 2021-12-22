@@ -13,7 +13,7 @@
         </md-button>
       </div>
     </div>
-    <TabRouter />
+    <!-- <TabRouter /> -->
   </div>
 </template>
 

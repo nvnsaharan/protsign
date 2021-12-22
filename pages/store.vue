@@ -62,10 +62,10 @@ export default {
 
 <style>
 .cards-div {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   margin: 0 auto;
-  justify-content: center;
+  width: 1050px;
+  grid-template-columns: auto auto auto;
 }
 .the-card {
   width: 350px;
@@ -84,5 +84,17 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media screen and (max-width: 700px) {
+  .cards-div {
+    grid-template-columns: auto auto;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .cards-div {
+    grid-template-columns: auto;
+  }
 }
 </style>

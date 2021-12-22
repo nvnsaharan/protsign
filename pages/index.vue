@@ -9,7 +9,7 @@
       <md-button @click="generator" class="md-raised md-primary">
         Generate
       </md-button>
-      <div ref="qrcode"></div>
+      <div id="qrcode" ref="qrcode"></div>
     </div>
   </div>
 </template>
@@ -25,18 +25,30 @@ export default {
     };
   },
   methods: {
-    generator() {
-      if (this.reason) {
-        var options_object = {
-          text: this.reason,
-          logo: "https://logos-world.net/wp-content/uploads/2020/12/Lays-Logo.png",
-          logoWidth: 100,
-          logoHeight: 100,
-        };
-        if (this.$refs.qrcode.children.length > 0) {
-          this.$refs.qrcode.innerHTML = "";
+    async generator() {
+      let text = "Do you want to generate this signature?";
+      if (confirm(text) == true) {
+        if (this.reason) {
+          const uuid =
+            this.$store.state.user.split(" ")[0] + "-" + String(Date.now());
+          const SAVE = {
+            reason: this.reason,
+            timestamp: this.$fireModule.firestore.FieldValue.serverTimestamp(),
+          };
+          await this.$fire.firestore.collection("signs").doc(uuid).set(SAVE);
+          var options_object = {
+            text: this.reason,
+            logo: this.$store.state.userimage,
+            logoWidth: 100,
+            logoHeight: 100,
+          };
+          if (this.$refs.qrcode.children.length > 0) {
+            this.$refs.qrcode.innerHTML = "";
+          }
+          var qrcode = new QRCode(this.$refs.qrcode, options_object);
+        } else {
+          //
         }
-        var qrcode = new QRCode(this.$refs.qrcode, options_object);
       }
     },
   },
@@ -56,9 +68,21 @@ export default {
   width: 100%;
 }
 .main-div {
-  width: 50% !important;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 700px !important;
 }
 .textarea {
+  resize: none;
   width: 50% !important;
+}
+#qrcode {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 </style>
