@@ -9,6 +9,7 @@
       <md-button @click="generator" class="md-raised md-primary">
         Generate
       </md-button>
+      <a :href="saved" >Link to block Information</a>
       <div id="qrcode" ref="qrcode"></div>
     </div>
   </div>
@@ -20,6 +21,7 @@ import QRCode from "easyqrcodejs";
 export default {
   data() {
     return {
+      saved:"",
       reason: "",
       qrcode: "",
     };
@@ -37,8 +39,9 @@ export default {
             timestamp: this.$fireModule.firestore.FieldValue.serverTimestamp(),
           };
           await this.$fire.firestore.collection("signs").doc(uuid).set(SAVE);
+          this.saved = 'https://protsign.netlify.app/' + uuid;
           var options_object = {
-            text: 'https://protsign.netlify.app/' + this.$store.state.user.split(" ")[0] + "-" + String(Date.now()),
+            text: 'https://protsign.netlify.app/' + uuid,
             logo: this.$store.state.userimage,
             logoWidth: 100,
             logoHeight: 100,

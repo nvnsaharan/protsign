@@ -25,7 +25,7 @@ export default {
         const DATA = query.data();
         const thedate = new Date( DATA.timestamp.toDate())
         return {
-          timestamp :thedate.getDate()+ "/" + thedate.getMonth() + "/" + thedate.getFullYear(),
+          timestamp :thedate.getDate()+ "/" + thedate.getMonth() + 1 + "/" + thedate.getFullYear(),
           reason: DATA.reason,
           user: DATA.user
         }
